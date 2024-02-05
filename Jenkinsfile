@@ -5,7 +5,7 @@ pipeline{
     agent any
     //agent { label 'Demo' }
     tools {
-        maven 'Maven'
+        maven 'maven 3.3.9'
     }
 
     parameters{
