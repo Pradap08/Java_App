@@ -4,9 +4,7 @@ pipeline{
 
     agent any
     //agent { label 'Demo' }
-    tools {
-        maven 'maven'
-    }
+    
 
     parameters{
 
@@ -74,6 +72,21 @@ pipeline{
                    
                    mvnBuild()
                }
+            }
+        }
+        stage('Jfrog Intergration'){
+            when { expression {  params.action == 'create' } }
+            steps {
+                script{
+                    withCredentials([usernamePassword(
+                    credentialsId: "artifactory",
+                    usernameVariable: "USER",
+                    passwordVariable: "PASS"
+                )]) {
+                    def curll  = "curl -u '${USER}:${PASS}' -T target/*.jar http://192.168.84.111:8082/artifactory/example-repo-local/"
+                    sh curll
+                    }
+                }
             }
         }
         stage('Docker Image Build'){
