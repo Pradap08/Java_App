@@ -83,7 +83,7 @@ pipeline{
                     usernameVariable: "USER",
                     passwordVariable: "PASS"
                 )]) {
-                    def curll  = "curl -u '${USER}:${PASS}' -T target/*.jar http://192.168.84.111:8082/artifactory/example-repo-local/"
+                    def curll  = "curl -X PUT -u '${USER}:${PASS}' -T target/*.jar http://192.168.84.111:8082/artifactory/example-repo-local/"
                     sh curll
                     }
                 }
