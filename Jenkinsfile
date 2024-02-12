@@ -76,7 +76,7 @@ pipeline{
                }
             }
         }
-        stage('Jfrog Intergration'){
+        stage('Pushing Artifact to Jfrog'){
             when { expression {  params.action == 'create' } }
             steps {
                 script{
