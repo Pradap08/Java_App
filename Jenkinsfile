@@ -11,7 +11,9 @@ pipeline{
         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/Destroy')
         string(name: 'ImageName', description: "name of the docker build", defaultValue: 'javapp')
         string(name: 'ImageTag', description: "tag of the docker build", defaultValue: 'v1')
-        string(name: 'DockerHubUser', description: "name of the Application", defaultValue: 'pradap07')
+        string(name: 'DockerHubUser', description: "name of the Application", defaultValue: 'pradap07')                
+        string(name: 'hostip', description: "ip of local host for jfrog integration", defaultValue: '192.168.84.111')
+
     }
 
     stages{
@@ -21,7 +23,7 @@ pipeline{
             steps{
             gitCheckout(
                 branch: "main",
-                url: "https://github.com/praveen1994dec/Java_app_3.0.git"
+                url: "https://github.com/Pradap08/Java_App.git"
             )
             }
         }
@@ -78,14 +80,7 @@ pipeline{
             when { expression {  params.action == 'create' } }
             steps {
                 script{
-                    withCredentials([usernamePassword(
-                    credentialsId: "artifactory",
-                    usernameVariable: "USER",
-                    passwordVariable: "PASS"
-                )]) {
-                    def curll  = "curl -X PUT -u '${USER}:${PASS}' -T target/*.jar http://192.168.84.111:8082/artifactory/example-repo-local/"
-                    sh curll
-                    }
+                    jfrog("${params.hostip}")
                 }
             }
         }
